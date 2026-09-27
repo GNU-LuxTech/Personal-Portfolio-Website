@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LuxTech — Mattia Vacca</title>
+  <meta name="description"
+    content="Portfolio of Mattia Vacca (LuxTech) — Go developer building privacy-focused, low-level software.">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+
+  <!-- Open Graph / social preview -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="LuxTech — Mattia Vacca">
+  <meta property="og:description" content="Go developer building privacy-focused, low-level software. Projects, skills and certifications.">
+  <meta property="og:image" content="https://gnu-luxtech.github.io/Personal-Portfolio-Website/assets/og-image.png">
+  <meta property="og:url" content="https://gnu-luxtech.github.io/Personal-Portfolio-Website/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="LuxTech — Mattia Vacca">
+  <meta name="twitter:description" content="Go developer building privacy-focused, low-level software.">
+  <meta name="twitter:image" content="https://gnu-luxtech.github.io/Personal-Portfolio-Website/assets/og-image.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- ---- Boot sequence screen ---- -->
+  <div id="bootScreen" class="boot-screen" aria-hidden="true">
+    <div class="boot-lines" id="bootLines"></div>
+  </div>
+
+  <!-- ---- Mobile nav toggle ---- -->
+  <button id="navToggle" class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+
+  <!-- ---- Side nav ---- -->
+  <nav id="sideNav" class="side-nav">
+    <div class="nav-brand">
+      <span class="nav-prompt">luxtech@portfolio</span><span class="nav-cursor">:~$</span>
+    </div>
+    <ol class="nav-list">
+      <li><a href="#home" class="nav-link active" data-target="home"><span class="nav-num">00</span>home</a></li>
+      <li><a href="#about" class="nav-link" data-target="about"><span class="nav-num">01</span>about</a></li>
+      <li><a href="#skills" class="nav-link" data-target="skills"><span class="nav-num">02</span>skills</a></li>
+      <li><a href="#projects" class="nav-link" data-target="projects"><span class="nav-num">03</span>projects</a></li>
+      <li><a href="#reviews" class="nav-link" data-target="reviews"><span class="nav-num">04</span>reviews</a></li>
+      <li><a href="#contact" class="nav-link" data-target="contact"><span class="nav-num">05</span>contact</a></li>
+    </ol>
+    <div class="nav-footer">
+      <a href="https://github.com/GNU-LuxTech" target="_blank" rel="noopener">github.com/GNU-LuxTech</a>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- ---- Home / Hero section ---- -->
+    <section id="home" class="section hero">
+      <p class="hero-eyebrow">$ whoami</p>
+      <h1 class="hero-title"><span id="typedName"></span><span class="cursor-blink">_</span></h1>
+      <p class="hero-role">Web and Software developer, systems tinkerer, based in Italy</p>
+      <p class="hero-desc">I build privacy-first, low-level software — encrypted messaging, terminal tools,
+        and the occasional over-engineered side project. Currently deep in Go, sharpening my Docker and
+        networking fundamentals along the way.</p>
+      <div class="hero-actions">
+        <a href="#projects" class="btn btn-primary">See my work</a>
+        <a href="#contact" class="btn btn-ghost">Get in touch</a>
+      </div>
+    </section>
+
+    <!-- ---- About section ---- -->
+    <section id="about" class="section">
+      <h2 class="section-title">about</h2>
+      <div class="section-rule"></div>
+      <div class="about-grid">
+        <p class="about-text">
+          I'm Mattia — online as <strong>LuxTech</strong> — a 26 year old IT enthusiast who cares more about
+          how things work under the hood than about shipping the fastest possible demo. Most of what I build
+          starts as a question about privacy and security, networking, or protocol design, and turns into a working
+          tool because I couldn't leave the question alone.
+        </p>
+        <p class="about-text">
+          My work lives mostly in Go, but I also use Python and JavaScript, HTML, and CSS. I use Git constantly, I'm
+          currently building out my Docker skills for
+          deployment and reproducible environments, and I'm working toward CompTIA Network+ to formalize the
+          networking knowledge I've picked up hands-on. Outside of code, I'm into amateur radio, video
+          editing, Gaming, AI and much more.
+        </p>
+        <ul class="about-facts">
+          <li><span>Base</span>Italy</li>
+          <li><span>Focus</span>Systems &amp; Security</li>
+          <li><span>Learning</span>Coding, Docker, Network+, Security+, PenTest+</li>
+          <li><span>Job Goal</span>Remote SOC Analyst</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ---- Skills section ---- -->
+    <section id="skills" class="section">
+      <h2 class="section-title">skills</h2>
+      <div class="section-rule"></div>
+      <div class="skills-grid">
+        <div class="skill-group">
+          <h3>I dabble in these languages:</h3>
+          <ul>
+            <li>JavaScript</li>
+            <li>PowerShell</li>
+            <li>Markdown</li>
+            <li>Python</li>
+            <li>HTML</li>
+            <li>CSS</li>
+            <li>SQL</li>
+            <li>Bash</li>
+            <li>Go</li>
+          </ul>
+        </div>
+        <div class="skill-group">
+          <h3>Tools &amp; workflow</h3>
+          <ul>
+            <li>Antigravity IDE</li>
+            <li>Antigravity CLI</li>
+            <li>Claude</li>
+            <li>Windows</li>
+            <li>Linux</li>
+            <li>Docker <span class="tag-learning">learning</span></li>
+            <li>GitHub</li>
+            <li>Git</li>
+          </ul>
+        </div>
+        <div class="skill-group">
+          <h3>Security &amp; networking</h3>
+          <ul>
+            <li>Applied cryptography</li>
+            <li>Tor / onion services</li>
+            <li>TCP/IP fundamentals</li>
+            <li>Network+ <span class="tag-learning">in progress</span></li>
+            <li>Security+ <span class="tag-learning">in progress</span></li>
+            <li>PenTest+ <span class="tag-learning">in progress</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="certs-block">
+        <h3 class="certs-heading">certifications</h3>
+        <p class="certs-hint">click a certificate to view it</p>
+        <div class="certs-grid" id="certsGrid"></div>
+      </div>
+    </section>
+
+    <!-- ---- Projects section ---- -->
+    <section id="projects" class="section">
+      <h2 class="section-title">projects</h2>
+      <div class="section-rule"></div>
+      <div class="projects-list">
+
+        <article class="project">
+          <div class="project-head">
+            <h3>Veil</h3>
+            <a href="https://github.com/GNU-LuxTech/Veil" target="_blank" rel="noopener" class="project-link">view repo
+              →</a>
+          </div>
+          <p class="project-desc">
+            A privacy-focused, terminal-based encrypted P2P messaging app written in Go. Messages route
+            over Tor onion services end-to-end, so there's no exit relay to trust. Identity and handshake
+            use Ed25519 and X25519, messages are encrypted with XChaCha20-Poly1305, and local identity is
+            protected at rest with Argon2id. Built with Bubble Tea for the TUI, plus a burner mode and a
+            panic wipe for key material.
+          </p>
+          <ul class="project-tags">
+            <li>Go</li>
+            <li>Tor</li>
+            <li>Ed25519 / X25519</li>
+            <li>XChaCha20-Poly1305</li>
+            <li>Bubble Tea</li>
+            <li>Argon2id</li>
+          </ul>
+        </article>
+
+        <article class="project">
+          <div class="project-head">
+            <h3>More on GitHub</h3>
+            <a href="https://github.com/GNU-LuxTech" target="_blank" rel="noopener" class="project-link">GNU-LuxTech
+              →</a>
+          </div>
+          <p class="project-desc">
+            Veil is the flagship, but it's not the only thing in the repo list. The rest of my projects —
+            smaller tools, experiments, and works in progress — live under the GNU-LuxTech on
+            GitHub. Worth a look if you want the full picture.
+          </p>
+        </article>
+
+      </div>
+
+      <div class="activity-block">
+        <h3 class="activity-heading">recent activity</h3>
+        <p class="activity-hint">$ curl api.github.com/users/GNU-LuxTech/repos</p>
+        <ul class="activity-list" id="activityList">
+          <li class="activity-loading">fetching...</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ---- Reviews section ---- -->
+    <section id="reviews" class="section">
+      <h2 class="section-title">reviews</h2>
+      <div class="section-rule"></div>
+      <div class="review-terminal">
+        <div class="review-terminal-bar">
+          <span class="rt-dot rt-dot-a"></span><span class="rt-dot rt-dot-b"></span><span
+            class="rt-dot rt-dot-c"></span>
+          <span class="review-terminal-title">reviews.log</span>
+        </div>
+        <div class="review-terminal-body">
+          <p class="review-terminal-prompt">$ cat reviews.log --entry <span id="reviewIndex">1</span>/<span
+              id="reviewTotal">3</span></p>
+          <p class="review-terminal-text" id="reviewText"></p>
+          <p class="review-terminal-meta" id="reviewMeta"></p>
+        </div>
+        <div class="review-terminal-controls">
+          <button type="button" id="reviewPrev" class="term-btn">&lt; prev</button>
+          <div class="review-dots" id="reviewDots" role="tablist" aria-label="Select review"></div>
+          <button type="button" id="reviewNext" class="term-btn">next &gt;</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---- Contact section ---- -->
+    <section id="contact" class="section contact-section">
+      <h2 class="section-title">contact</h2>
+      <div class="section-rule"></div>
+      <p class="contact-text">Have a project idea, a question, or just want to chat ? Reach out.</p>
+      <div class="contact-links">
+        <a href="mailto:[EMAIL_ADDRESS]" class="contact-link">GNU-LuxTech@Protonmail.com</a>
+      </div>
+      <p class="footer-note">Built with Antigravity CLI and Claude. Hosted on GitHub Pages.</p>
+    </section>
+
+  </main>
+
+  <div class="cert-modal" id="certModal" aria-hidden="true">
+    <div class="cert-modal-window" role="dialog" aria-modal="true" aria-labelledby="certModalTitle">
+      <div class="cert-modal-bar">
+        <span class="rt-dot rt-dot-a"></span><span class="rt-dot rt-dot-b"></span><span class="rt-dot rt-dot-c"></span>
+        <span class="cert-modal-title" id="certModalTitle">certificate</span>
+        <button type="button" class="cert-modal-close" id="certModalClose" aria-label="Close viewer">&times;</button>
+      </div>
+      <div class="cert-modal-body" id="certModalBody"></div>
+      <div class="cert-modal-controls">
+        <button type="button" id="certPrev" class="term-btn">&lt; prev</button>
+        <span class="cert-modal-meta" id="certModalMeta"></span>
+        <button type="button" id="certNext" class="term-btn">next &gt;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ---- Scripts ---- -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>

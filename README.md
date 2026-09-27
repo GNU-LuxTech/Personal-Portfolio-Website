@@ -4,7 +4,7 @@ Minimal, green-on-black personal portfolio site. Single scrolling page — about
 certifications, projects, live GitHub activity, reviews, and contact — built with plain
 HTML, CSS and JS, no framework, no build step.
 
-**Live site:** https://gnu-luxtech.github.io/ *(update once GitHub Pages is enabled)*
+**Live site:** <https://gnu-luxtech.github.io/Personal-Portfolio-Website/>
 
 ## Stack
 

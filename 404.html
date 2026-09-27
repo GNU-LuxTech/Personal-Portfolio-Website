@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 — Not found | LuxTech</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<main>
+  <section class="error-page">
+    <p class="error-code">404</p>
+    <p class="error-msg">$ cd <span class="error-path">requested-page</span><br>
+      bash: no such file or directory</p>
+    <a href="index.html" class="btn btn-primary">cd ~</a>
+  </section>
+</main>
+
+<script>
+  const segs = window.location.pathname.split('/').filter(p => p && p !== '404.html' && p !== '404');
+  const path = segs.pop() || 'requested-page';
+  const el = document.querySelector('.error-path');
+  if (el) el.textContent = path;
+</script>
+</body>
+</html>
