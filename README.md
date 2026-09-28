@@ -1,8 +1,8 @@
 # LuxTech — Personal Portfolio
 
-Minimal, green-on-black personal portfolio site. Single scrolling page — about, skills,
-certifications, projects, live GitHub activity, reviews, and contact — built with plain
-HTML, CSS and JS, no framework, no build step.
+Minimal, green-on-black personal portfolio site. Single scrolling page — interactive shell,
+about, skills, certifications, projects, live GitHub activity, reviews, and contact — built with
+plain HTML, CSS and JS, no framework, no build step.
 
 **Live site:** <https://gnu-luxtech.github.io/Personal-Portfolio-Website/>
 
@@ -22,7 +22,7 @@ No build tools, no dependencies to install — it's static files served as-is.
 .
 ├── index.html          # all page content/sections
 ├── style.css            # all styling
-├── script.js             # nav, boot sequence, reviews, certs viewer, GitHub activity feed
+├── script.js             # nav, boot sequence, interactive shell, reviews, certs viewer, GitHub activity feed
 ├── 404.html              # custom not-found page (served automatically by GitHub Pages)
 └── assets/
     ├── favicon.svg

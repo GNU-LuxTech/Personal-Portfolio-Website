@@ -17,7 +17,7 @@
   <meta property="og:url" content="https://gnu-luxtech.github.io/Personal-Portfolio-Website/">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="LuxTech — Mattia Vacca">
-  <meta name="twitter:description" content="Go developer building privacy-focused, low-level software.">
+  <meta name="twitter:description" content="A web and software developer building privacy-focused, low-level software.">
   <meta name="twitter:image" content="https://gnu-luxtech.github.io/Personal-Portfolio-Website/assets/og-image.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -47,11 +47,12 @@
     </div>
     <ol class="nav-list">
       <li><a href="#home" class="nav-link active" data-target="home"><span class="nav-num">00</span>home</a></li>
-      <li><a href="#about" class="nav-link" data-target="about"><span class="nav-num">01</span>about</a></li>
-      <li><a href="#skills" class="nav-link" data-target="skills"><span class="nav-num">02</span>skills</a></li>
-      <li><a href="#projects" class="nav-link" data-target="projects"><span class="nav-num">03</span>projects</a></li>
-      <li><a href="#reviews" class="nav-link" data-target="reviews"><span class="nav-num">04</span>reviews</a></li>
-      <li><a href="#contact" class="nav-link" data-target="contact"><span class="nav-num">05</span>contact</a></li>
+      <li><a href="#shell" class="nav-link" data-target="shell"><span class="nav-num">01</span>shell</a></li>
+      <li><a href="#about" class="nav-link" data-target="about"><span class="nav-num">02</span>about</a></li>
+      <li><a href="#skills" class="nav-link" data-target="skills"><span class="nav-num">03</span>skills</a></li>
+      <li><a href="#projects" class="nav-link" data-target="projects"><span class="nav-num">04</span>projects</a></li>
+      <li><a href="#reviews" class="nav-link" data-target="reviews"><span class="nav-num">05</span>reviews</a></li>
+      <li><a href="#contact" class="nav-link" data-target="contact"><span class="nav-num">06</span>contact</a></li>
     </ol>
     <div class="nav-footer">
       <a href="https://github.com/GNU-LuxTech" target="_blank" rel="noopener">github.com/GNU-LuxTech</a>
@@ -71,6 +72,24 @@
       <div class="hero-actions">
         <a href="#projects" class="btn btn-primary">See my work</a>
         <a href="#contact" class="btn btn-ghost">Get in touch</a>
+      </div>
+    </section>
+
+    <!-- ---- Shell section ---- -->
+    <section id="shell" class="section">
+      <h2 class="section-title">shell</h2>
+      <div class="section-rule"></div>
+      <p class="shell-intro">Prefer typing to scrolling? Poke around from the command line.</p>
+      <div class="shell-term" id="shellTerm">
+        <div class="review-terminal-bar">
+          <span class="rt-dot rt-dot-a"></span><span class="rt-dot rt-dot-b"></span><span class="rt-dot rt-dot-c"></span>
+          <span class="review-terminal-title">visitor@luxtech: ~</span>
+        </div>
+        <div class="shell-out" id="shellOut" aria-live="polite"></div>
+        <form class="shell-form" id="shellForm" autocomplete="off">
+          <label class="shell-prompt" for="shellInput">visitor@luxtech:~$</label>
+          <input class="shell-input" id="shellInput" type="text" spellcheck="false" autocapitalize="off" autocorrect="off" aria-label="Terminal command input">
+        </form>
       </div>
     </section>
 

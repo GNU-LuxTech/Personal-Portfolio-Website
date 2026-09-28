@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const lines = [
         'booting luxtech@portfolio ...',
         'loading modules ... [ok]',
-        'mounting /home /about /skills /projects /reviews /contact ... [ok]',
+        'mounting /home /shell /about /skills /projects /reviews /contact ... [ok]',
         'session ready — welcome.'
       ];
       let li = 0, ci = 0, currentP = document.createElement('p');
@@ -94,7 +94,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const certs = [
-    { title: 'CompTIA Network+', issuer: 'CompTIA', date: '2026', file: 'assets/certs/HACCP 20 ore.pdf' },
     { title: 'Pre Security', issuer: 'TryHackMe', date: '2022', file: 'assets/certs/PRE SECURITY CERTIFICATE.png' }
   ];
 
@@ -322,6 +321,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener('keydown', (e) => {
       if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+      if (e.target && e.target.tagName === 'INPUT') return;
       const rect = reviewSection.getBoundingClientRect();
       const inView = rect.top < window.innerHeight * 0.6 && rect.bottom > window.innerHeight * 0.4;
       if (!inView) return;
@@ -332,6 +332,199 @@ document.addEventListener('DOMContentLoaded', () => {
     // initial render (no fade on first paint)
     reviewText.textContent = reviews[0].text;
     reviewMeta.textContent = reviews[0].meta;
+  }
+
+  /* ---- Interactive mini-shell ---- */
+  const shellOut = document.getElementById('shellOut');
+  const shellForm = document.getElementById('shellForm');
+  const shellInput = document.getElementById('shellInput');
+
+  if (shellOut && shellForm && shellInput) {
+    const PROMPT = 'visitor@luxtech:~$';
+    const SECTIONS = ['home', 'shell', 'about', 'skills', 'projects', 'reviews', 'contact'];
+    const files = {
+      'about.txt': 'about',
+      'skills.txt': 'skills',
+      'projects.txt': 'projects',
+      'certs.txt': 'certs',
+      'reviews.log': 'reviews',
+      'contact.txt': 'contact'
+    };
+    const cmdHistory = [];
+    let histPos = 0;
+
+    const scrollDown = () => { shellOut.scrollTop = shellOut.scrollHeight; };
+
+    const print = (text = '', cls = '') => {
+      const div = document.createElement('div');
+      div.className = 'shell-line' + (cls ? ' ' + cls : '');
+      div.textContent = text;
+      shellOut.appendChild(div);
+      return div;
+    };
+
+    const printLink = (prefix, label, href) => {
+      const div = print(prefix);
+      const a = document.createElement('a');
+      a.href = href;
+      a.textContent = label;
+      if (!href.startsWith('mailto:')) { a.target = '_blank'; a.rel = 'noopener'; }
+      div.appendChild(a);
+    };
+
+    const commands = {
+      help() {
+        print('Available commands:');
+        [
+          ['help', 'show this list'],
+          ['whoami', 'who is behind this site'],
+          ['about', 'a short bio'],
+          ['skills', 'languages, tools, security'],
+          ['projects', 'what I have built'],
+          ['certs', 'certifications'],
+          ['reviews', 'what people say'],
+          ['contact', 'how to reach me'],
+          ['github', 'open my GitHub profile'],
+          ['ls', 'list files'],
+          ['cat <file>', 'read a file'],
+          ['goto <section>', 'jump to a section of the page'],
+          ['echo <text>', 'print text'],
+          ['date', 'current date and time'],
+          ['history', 'previous commands'],
+          ['clear', 'clear the screen (or Ctrl+L)']
+        ].forEach(([c, d]) => print('  ' + c.padEnd(16) + d));
+        print('Tip: Tab autocompletes, ↑/↓ browse history.', 'shell-dim');
+      },
+      whoami() {
+        print('luxtech');
+        print('visitor.', 'shell-dim');
+      },
+      about() {
+        print('Mattia — online as LuxTech. 26 year old IT enthusiast who cares more about');
+        print('how things work under the hood than about shipping the fastest possible demo.');
+        print('Mostly Go, lots of Git, learning Docker, working toward CompTIA Network+, Security+, PenTest+.');
+      },
+      skills() {
+        print('languages   Go, Python, JavaScript, Bash, PowerShell, Markdown, HTML, CSS, SQL');
+        print('tools       Antigravity, Claude, Git, Docker (learning), Linux, Windows, GitHub');
+        print('security    applied cryptography, Tor / onion services, TCP/IP, Network+, Security+, PenTest+');
+      },
+      projects() {
+        print('Veil — privacy-focused, terminal-based encrypted P2P messaging app in Go.');
+        print('       Tor onion services, Ed25519 / X25519, XChaCha20-Poly1305, Argon2id.');
+        printLink('More: ', `github.com/${GH_ORG}`, `https://github.com/${GH_ORG}`);
+      },
+      certs() {
+        if (!certs.length) return print('No certificates listed.', 'shell-dim');
+        certs.forEach((c) => print(`- ${c.title} — ${c.issuer}, ${c.date}`));
+        print('Open them in the Skills section.', 'shell-dim');
+      },
+      reviews() {
+        reviews.forEach((r, i) => {
+          print(`[${i + 1}] ${r.text}`);
+          print(`    ${r.meta}`, 'shell-dim');
+        });
+      },
+      contact() {
+        const mail = document.querySelector('.contact-link[href^="mailto:"]');
+        if (mail) printLink('email   ', mail.textContent.trim(), mail.getAttribute('href'));
+        printLink('github  ', `github.com/${GH_ORG}`, `https://github.com/${GH_ORG}`);
+      },
+      github() {
+        print('opening github ...', 'shell-dim');
+        window.open(`https://github.com/${GH_ORG}`, '_blank', 'noopener');
+      },
+      ls() {
+        print(Object.keys(files).join('  '));
+      },
+      cat([file]) {
+        if (!file) return print('cat: missing file operand', 'shell-err');
+        if (!Object.prototype.hasOwnProperty.call(files, file)) {
+          return print(`cat: ${file}: No such file or directory`, 'shell-err');
+        }
+        commands[files[file]]();
+      },
+      goto([target]) {
+        if (!target) return print('usage: goto <section>  (' + SECTIONS.join(', ') + ')', 'shell-err');
+        const id = target.toLowerCase();
+        const el = SECTIONS.includes(id) ? document.getElementById(id) : null;
+        if (!el) return print(`goto: no such section: ${target}`, 'shell-err');
+        print(`jumping to #${id} ...`, 'shell-dim');
+        el.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+        shellInput.blur();
+      },
+      echo(args) { print(args.join(' ')); },
+      date() { print(new Date().toString()); },
+      history() {
+        if (!cmdHistory.length) return print('(empty)', 'shell-dim');
+        cmdHistory.forEach((c, i) => print(`${String(i + 1).padStart(3)}  ${c}`));
+      },
+      clear() { shellOut.innerHTML = ''; }
+    };
+
+    const run = (raw) => {
+      const echoLine = print('', 'shell-cmd');
+      const b = document.createElement('b');
+      b.textContent = PROMPT;
+      echoLine.append(b, ' ' + raw);
+
+      const line = raw.trim();
+      if (!line) return;
+      cmdHistory.push(line);
+      histPos = cmdHistory.length;
+
+      const [name, ...args] = line.split(/\s+/);
+      const key = name.toLowerCase();
+      if (Object.prototype.hasOwnProperty.call(commands, key)) {
+        commands[key](args);
+      } else {
+        print(`${name}: command not found. Type 'help' for available commands.`, 'shell-err');
+      }
+    };
+
+    shellForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const value = shellInput.value;
+      shellInput.value = '';
+      run(value);
+      scrollDown();
+    });
+
+    shellInput.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (!cmdHistory.length) return;
+        histPos = e.key === 'ArrowUp' ? Math.max(0, histPos - 1) : Math.min(cmdHistory.length, histPos + 1);
+        shellInput.value = cmdHistory[histPos] || '';
+        requestAnimationFrame(() => shellInput.setSelectionRange(shellInput.value.length, shellInput.value.length));
+      } else if (e.key === 'Tab') {
+        e.preventDefault();
+        const parts = shellInput.value.split(' ');
+        let pool = Object.keys(commands);
+        if (parts.length > 1) {
+          pool = parts[0] === 'goto' ? SECTIONS : parts[0] === 'cat' ? Object.keys(files) : [];
+        }
+        const frag = parts[parts.length - 1].toLowerCase();
+        const matches = pool.filter((x) => x.startsWith(frag));
+        if (matches.length === 1) {
+          parts[parts.length - 1] = matches[0];
+          shellInput.value = parts.join(' ') + (parts.length === 1 ? ' ' : '');
+        } else if (matches.length > 1) {
+          print(matches.join('  '), 'shell-dim');
+          scrollDown();
+        }
+      } else if (e.ctrlKey && e.key.toLowerCase() === 'l') {
+        e.preventDefault();
+        commands.clear();
+      }
+    });
+
+    shellOut.addEventListener('click', () => {
+      if (!window.getSelection().toString()) shellInput.focus({ preventScroll: true });
+    });
+
+    print("luxtech shell v1.0 — type 'help' to get started.", 'shell-ok');
+    print('');
   }
 
   /* ---- Scroll-spy: highlight active section in nav ---- */
