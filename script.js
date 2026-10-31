@@ -94,6 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const certs = [
+    { title: 'CompTIA Network+ ce', issuer: 'CompTIA', date: '2026', file: 'assets/certs/CompTIA Network+ ce certificate.pdf' },
     { title: 'Pre Security', issuer: 'TryHackMe', date: '2022', file: 'assets/certs/PRE SECURITY CERTIFICATE.png' }
   ];
 
@@ -402,12 +403,12 @@ document.addEventListener('DOMContentLoaded', () => {
       about() {
         print('Mattia — online as LuxTech. 26 year old IT enthusiast who cares more about');
         print('how things work under the hood than about shipping the fastest possible demo.');
-        print('Mostly Go, lots of Git, learning Docker, working toward CompTIA Network+, Security+, PenTest+.');
+        print('Mostly Go, lots of Git, learning Docker, certified CompTIA Network+, working toward Security+, PenTest+.');
       },
       skills() {
         print('languages   Go, Python, JavaScript, Bash, PowerShell, Markdown, HTML, CSS, SQL');
         print('tools       Antigravity, Claude, Git, Docker (learning), Linux, Windows, GitHub');
-        print('security    applied cryptography, Tor / onion services, TCP/IP, Network+, Security+, PenTest+');
+        print('security    applied cryptography, Tor / onion services, TCP/IP, CompTIA Network+, Security+ (in progress), PenTest+ (in progress)');
       },
       projects() {
         print('Veil — privacy-focused, terminal-based encrypted P2P messaging app in Go.');
