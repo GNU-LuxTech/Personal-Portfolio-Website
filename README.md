@@ -57,9 +57,16 @@ the top of `script.js`:
 { title: 'Cert name', issuer: 'Issuer', date: '2026', file: 'assets/certs/your-file.pdf' }
 ```
 
-## Adding reviews
+## Reviews & Automated Moderation
 
-Edit the `reviews` array in `script.js` — each entry is a `text` / `meta` pair.
+Visitors can click **`+ submit review`** in the `reviews.log` terminal window to submit their feedback via a terminal modal.
+
+### How moderation works (Zero Code):
+1. The submission creates an issue on your repo with pre-formatted JSON details (and sends an email alert via Web3Forms if configured).
+2. **To Approve**: Go to your repository's **Issues**, and attach the label **`approved`** to the review issue.
+3. Once approved, the review will immediately be pulled by the website's live GitHub API fetch and displayed with star ratings (`★★★★★`) in `reviews.log`!
+4. **To Reject**: Simply close or delete the issue. No rejected or pending reviews will ever appear on the website.
+5. If offline or GitHub API is unavailable, the site gracefully falls back to the curated default reviews in `script.js`.
 
 ---
 

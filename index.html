@@ -236,10 +236,12 @@
           <span class="rt-dot rt-dot-a"></span><span class="rt-dot rt-dot-b"></span><span
             class="rt-dot rt-dot-c"></span>
           <span class="review-terminal-title">reviews.log</span>
+          <button type="button" id="openReviewModal" class="term-btn term-btn-sm" aria-label="Submit a review">+ submit review</button>
         </div>
         <div class="review-terminal-body">
           <p class="review-terminal-prompt">$ cat reviews.log --entry <span id="reviewIndex">1</span>/<span
               id="reviewTotal">3</span></p>
+          <div class="review-stars" id="reviewStars" aria-label="Review rating"></div>
           <p class="review-terminal-text" id="reviewText"></p>
           <p class="review-terminal-meta" id="reviewMeta"></p>
         </div>
@@ -257,12 +259,60 @@
       <div class="section-rule"></div>
       <p class="contact-text">Have a project idea, a question, or just want to chat ? Reach out.</p>
       <div class="contact-links">
-        <a href="mailto:[EMAIL_ADDRESS]" class="contact-link">GNU-LuxTech@Protonmail.com</a>
+        <a href="mailto:GNU-LuxTech@Protonmail.com" class="contact-link">GNU-LuxTech@Protonmail.com</a>
       </div>
       <p class="footer-note">Built with Antigravity CLI and Claude. Hosted on GitHub Pages.</p>
     </section>
 
   </main>
+
+  <!-- ---- Review Submission Modal ---- -->
+  <div class="cert-modal review-modal" id="reviewModal" aria-hidden="true">
+    <div class="cert-modal-window review-modal-window" role="dialog" aria-modal="true" aria-labelledby="reviewModalTitle">
+      <div class="cert-modal-bar">
+        <span class="rt-dot rt-dot-a"></span><span class="rt-dot rt-dot-b"></span><span class="rt-dot rt-dot-c"></span>
+        <span class="cert-modal-title" id="reviewModalTitle">submit_review.sh</span>
+        <button type="button" class="cert-modal-close" id="reviewModalClose" aria-label="Close form">&times;</button>
+      </div>
+      <form class="review-form" id="reviewForm">
+        <p class="review-form-hint">$ ./submit-feedback --to luxtech</p>
+        
+        <div class="form-row">
+          <label for="revName" class="form-label">Name / Handle *</label>
+          <input type="text" id="revName" name="name" required placeholder="e.g. Alex M." class="form-input" autocomplete="name">
+        </div>
+
+        <div class="form-row">
+          <label for="revRole" class="form-label">Role &amp; Context *</label>
+          <input type="text" id="revRole" name="role" required placeholder="e.g. Colleague, Systems Dev, or Client" class="form-input">
+        </div>
+
+        <div class="form-row">
+          <label class="form-label">Rating *</label>
+          <div class="star-picker" id="starPicker" role="radiogroup" aria-label="Rating selection">
+            <button type="button" class="star-btn active" data-rating="1" aria-label="1 star">★</button>
+            <button type="button" class="star-btn active" data-rating="2" aria-label="2 stars">★</button>
+            <button type="button" class="star-btn active" data-rating="3" aria-label="3 stars">★</button>
+            <button type="button" class="star-btn active" data-rating="4" aria-label="4 stars">★</button>
+            <button type="button" class="star-btn active" data-rating="5" aria-label="5 stars">★</button>
+          </div>
+          <input type="hidden" id="revRating" name="rating" value="5">
+        </div>
+
+        <div class="form-row">
+          <label for="revText" class="form-label">Review *</label>
+          <textarea id="revText" name="message" required rows="4" placeholder="Your experience collaborating, feedback on projects, etc..." class="form-input form-textarea"></textarea>
+        </div>
+
+        <div class="review-form-status" id="reviewStatus" aria-live="polite"></div>
+
+        <div class="review-form-actions">
+          <button type="button" class="term-btn" id="reviewCancel">cancel</button>
+          <button type="submit" class="btn btn-primary" id="reviewSubmitBtn">[ execute submit ]</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <div class="cert-modal" id="certModal" aria-hidden="true">
     <div class="cert-modal-window" role="dialog" aria-modal="true" aria-labelledby="certModalTitle">

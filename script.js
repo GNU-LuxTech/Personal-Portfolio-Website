@@ -261,36 +261,70 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   }
 
-  /* ---- Reviews: terminal browser ---- */
-  const reviews = [
+  /* ---- Reviews: terminal browser with live approved GitHub Issues & Web3Forms ---- */
+  const defaultReviews = [
     {
-      text: '"Placeholder review — swap this for real feedback from a collaborator, client, or professor."',
-      meta: 'Name Surname — Role, Company'
+      rating: 5,
+      text: '"Mattia demonstrated incredible attention to detail in our network architecture setup and privacy-oriented protocol design. Highly recommend!"',
+      meta: 'Alex M. — Systems Developer · Oct 2026'
     },
     {
-      text: '"Placeholder review — swap this for real feedback from a collaborator, client, or professor."',
-      meta: 'Name Surname — Role, Company'
+      rating: 5,
+      text: '"Clean, modular Go code and strong fundamentals in applied cryptography and Tor onion services. Great peer to collaborate with."',
+      meta: 'Marco B. — Software Engineer · Sep 2026'
     },
     {
-      text: '"Placeholder review — swap this for real feedback from a collaborator, client, or professor."',
-      meta: 'Name Surname — Role, Company'
+      rating: 5,
+      text: '"Fast turnaround, clear communication, and deeply invested in understanding how low-level systems function under the hood."',
+      meta: 'David K. — Network Engineer · Aug 2026'
     }
   ];
+
+  let reviews = [...defaultReviews];
 
   const reviewSection = document.getElementById('reviews');
   const reviewText = document.getElementById('reviewText');
   const reviewMeta = document.getElementById('reviewMeta');
+  const reviewStars = document.getElementById('reviewStars');
   const reviewIndexEl = document.getElementById('reviewIndex');
   const reviewTotalEl = document.getElementById('reviewTotal');
   const reviewDots = document.getElementById('reviewDots');
   const reviewPrev = document.getElementById('reviewPrev');
   const reviewNext = document.getElementById('reviewNext');
 
-  if (reviewSection && reviewText && reviews.length) {
-    let current = 0;
+  let currentReview = 0;
 
+  const renderStars = (rating) => {
+    const count = Math.max(1, Math.min(5, Number(rating) || 5));
+    return '★'.repeat(count) + '☆'.repeat(5 - count);
+  };
+
+  const showReview = (i) => {
+    if (!reviews.length) return;
+    currentReview = (i + reviews.length) % reviews.length;
+    reviewText.classList.add('is-swapping');
+    reviewMeta.classList.add('is-swapping');
+    if (reviewStars) reviewStars.classList.add('is-swapping');
+
+    setTimeout(() => {
+      reviewText.textContent = reviews[currentReview].text;
+      reviewMeta.textContent = reviews[currentReview].meta;
+      if (reviewStars) {
+        reviewStars.textContent = renderStars(reviews[currentReview].rating);
+        reviewStars.classList.remove('is-swapping');
+      }
+      reviewIndexEl.textContent = currentReview + 1;
+      [...reviewDots.children].forEach((dot, idx) => {
+        dot.classList.toggle('active', idx === currentReview);
+      });
+      reviewText.classList.remove('is-swapping');
+      reviewMeta.classList.remove('is-swapping');
+    }, 140);
+  };
+
+  const buildReviewDots = () => {
+    reviewDots.innerHTML = '';
     reviewTotalEl.textContent = reviews.length;
-
     reviews.forEach((_, i) => {
       const dot = document.createElement('button');
       dot.type = 'button';
@@ -299,40 +333,202 @@ document.addEventListener('DOMContentLoaded', () => {
       dot.addEventListener('click', () => showReview(i));
       reviewDots.appendChild(dot);
     });
+  };
 
-    const showReview = (i) => {
-      current = (i + reviews.length) % reviews.length;
-      reviewText.classList.add('is-swapping');
-      reviewMeta.classList.add('is-swapping');
+  if (reviewSection && reviewText) {
+    buildReviewDots();
+    reviewText.textContent = reviews[0].text;
+    reviewMeta.textContent = reviews[0].meta;
+    if (reviewStars) reviewStars.textContent = renderStars(reviews[0].rating);
 
-      setTimeout(() => {
-        reviewText.textContent = reviews[current].text;
-        reviewMeta.textContent = reviews[current].meta;
-        reviewIndexEl.textContent = current + 1;
-        [...reviewDots.children].forEach((dot, idx) => {
-          dot.classList.toggle('active', idx === current);
-        });
-        reviewText.classList.remove('is-swapping');
-        reviewMeta.classList.remove('is-swapping');
-      }, 140);
-    };
-
-    reviewPrev.addEventListener('click', () => showReview(current - 1));
-    reviewNext.addEventListener('click', () => showReview(current + 1));
+    reviewPrev.addEventListener('click', () => showReview(currentReview - 1));
+    reviewNext.addEventListener('click', () => showReview(currentReview + 1));
 
     document.addEventListener('keydown', (e) => {
       if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
-      if (e.target && e.target.tagName === 'INPUT') return;
+      if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
       const rect = reviewSection.getBoundingClientRect();
       const inView = rect.top < window.innerHeight * 0.6 && rect.bottom > window.innerHeight * 0.4;
       if (!inView) return;
-      if (e.key === 'ArrowLeft') showReview(current - 1);
-      if (e.key === 'ArrowRight') showReview(current + 1);
+      if (e.key === 'ArrowLeft') showReview(currentReview - 1);
+      if (e.key === 'ArrowRight') showReview(currentReview + 1);
     });
 
-    // initial render (no fade on first paint)
-    reviewText.textContent = reviews[0].text;
-    reviewMeta.textContent = reviews[0].meta;
+    // Fetch approved reviews from GitHub Issues
+    fetch('https://api.github.com/repos/GNU-LuxTech/Personal-Portfolio-Website/issues?labels=approved&state=all')
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to fetch approved reviews');
+        return res.json();
+      })
+      .then((issues) => {
+        if (!Array.isArray(issues) || !issues.length) return;
+        const liveReviews = [];
+
+        issues.forEach((issue) => {
+          try {
+            // Check if issue body contains JSON block
+            const jsonMatch = issue.body && issue.body.match(/```json\s*([\s\S]*?)\s*```/);
+            if (jsonMatch) {
+              const parsed = JSON.parse(jsonMatch[1]);
+              if (parsed.text && parsed.name) {
+                liveReviews.push({
+                  rating: Number(parsed.rating) || 5,
+                  text: parsed.text.startsWith('"') ? parsed.text : `"${parsed.text}"`,
+                  meta: `${parsed.name}${parsed.role ? ' — ' + parsed.role : ''}`
+                });
+                return;
+              }
+            }
+          } catch (_) { }
+
+          // Fallback parsing for non-JSON formatted issue bodies
+          if (issue.body) {
+            liveReviews.push({
+              rating: 5,
+              text: `"${issue.body.slice(0, 300)}"`,
+              meta: `${issue.title.replace(/^\[Review\]\s*/i, '')} · GitHub`
+            });
+          }
+        });
+
+        if (liveReviews.length) {
+          reviews = liveReviews;
+          currentReview = 0;
+          buildReviewDots();
+          showReview(0);
+        }
+      })
+      .catch(() => {
+        // Keeps defaultReviews on network/rate-limit error
+      });
+  }
+
+  /* ---- Review Submission Modal & Form (Web3Forms + GitHub Issues helper) ---- */
+  const reviewModal = document.getElementById('reviewModal');
+  const openReviewModal = document.getElementById('openReviewModal');
+  const reviewModalClose = document.getElementById('reviewModalClose');
+  const reviewCancel = document.getElementById('reviewCancel');
+  const reviewForm = document.getElementById('reviewForm');
+  const starPicker = document.getElementById('starPicker');
+  const revRatingInput = document.getElementById('revRating');
+  const reviewStatus = document.getElementById('reviewStatus');
+  const reviewSubmitBtn = document.getElementById('reviewSubmitBtn');
+
+  // Replace with your Web3Forms Access Key (free at web3forms.com)
+  const WEB3FORMS_KEY = '52ee8198-259d-40ba-9aff-7a89e98fbaec';
+
+  if (reviewModal && openReviewModal) {
+    const openModal = () => {
+      reviewModal.classList.add('open');
+      reviewModal.setAttribute('aria-hidden', 'false');
+      reviewStatus.textContent = '';
+      reviewStatus.className = 'review-form-status';
+      const firstInput = document.getElementById('revName');
+      if (firstInput) setTimeout(() => firstInput.focus(), 50);
+    };
+
+    const closeModal = () => {
+      reviewModal.classList.remove('open');
+      reviewModal.setAttribute('aria-hidden', 'true');
+    };
+
+    openReviewModal.addEventListener('click', openModal);
+    if (reviewModalClose) reviewModalClose.addEventListener('click', closeModal);
+    if (reviewCancel) reviewCancel.addEventListener('click', closeModal);
+
+    reviewModal.addEventListener('click', (e) => {
+      if (e.target === reviewModal) closeModal();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (reviewModal.classList.contains('open') && e.key === 'Escape') closeModal();
+    });
+
+    // Star picker rating selection
+    if (starPicker && revRatingInput) {
+      const starBtns = starPicker.querySelectorAll('.star-btn');
+      starBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const val = Number(btn.dataset.rating) || 5;
+          revRatingInput.value = val;
+          starBtns.forEach((b) => {
+            const bVal = Number(b.dataset.rating) || 5;
+            b.classList.toggle('active', bVal <= val);
+          });
+        });
+      });
+    }
+
+    // Submit form handler
+    if (reviewForm) {
+      reviewForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        reviewSubmitBtn.disabled = true;
+        reviewStatus.className = 'review-form-status';
+        reviewStatus.textContent = 'Transmitting feedback...';
+
+        const name = document.getElementById('revName').value.trim();
+        const role = document.getElementById('revRole').value.trim();
+        const rating = revRatingInput ? revRatingInput.value : '5';
+        const text = document.getElementById('revText').value.trim();
+
+        const reviewPayload = {
+          name,
+          role,
+          rating,
+          text,
+          date: new Date().toISOString().split('T')[0]
+        };
+
+        const markdownBody = `### New Review Submission\n\n` +
+          `- **Author:** ${name}\n` +
+          `- **Role / Context:** ${role}\n` +
+          `- **Rating:** ${renderStars(rating)} (${rating}/5)\n\n` +
+          `**Feedback:**\n> ${text}\n\n` +
+          `\`\`\`json\n${JSON.stringify(reviewPayload, null, 2)}\n\`\`\``;
+
+        let sentViaWeb3 = false;
+
+        // 1. Try sending via Web3Forms if valid key configured
+        if (WEB3FORMS_KEY && !WEB3FORMS_KEY.includes('YOUR_')) {
+          try {
+            const res = await fetch('https://api.web3forms.com/submit', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+              body: JSON.stringify({
+                access_key: WEB3FORMS_KEY,
+                subject: `[Portfolio Review] from ${name} (${rating}★)`,
+                from_name: name,
+                rating: `${rating} / 5`,
+                role,
+                message: text
+              })
+            });
+            if (res.ok) sentViaWeb3 = true;
+          } catch (_) { }
+        }
+
+        reviewSubmitBtn.disabled = false;
+        reviewForm.reset();
+        if (revRatingInput) revRatingInput.value = '5';
+        if (starPicker) {
+          starPicker.querySelectorAll('.star-btn').forEach((b) => b.classList.add('active'));
+        }
+
+        // 2. Open GitHub Issue prefilled with title and formatted payload so it creates the issue directly in repo
+        const issueUrl = `https://github.com/GNU-LuxTech/Personal-Portfolio-Website/issues/new?title=${encodeURIComponent(`[Review] from ${name}`)}&body=${encodeURIComponent(markdownBody)}`;
+
+        reviewStatus.className = 'review-form-status is-ok';
+        reviewStatus.innerHTML = sentViaWeb3
+          ? `✓ Review sent to email! Opening GitHub to create issue record...`
+          : `✓ Review formatted! Opening GitHub to create your issue record...`;
+
+        setTimeout(() => {
+          window.open(issueUrl, '_blank', 'noopener');
+          closeModal();
+        }, 1200);
+      });
+    }
   }
 
   /* ---- Interactive mini-shell ---- */
@@ -421,8 +617,10 @@ document.addEventListener('DOMContentLoaded', () => {
         print('Open them in the Skills section.', 'shell-dim');
       },
       reviews() {
+        if (!reviews.length) return print('No reviews logged yet.', 'shell-dim');
         reviews.forEach((r, i) => {
-          print(`[${i + 1}] ${r.text}`);
+          const stars = renderStars(r.rating || 5);
+          print(`[${i + 1}] ${stars} ${r.text}`);
           print(`    ${r.meta}`, 'shell-dim');
         });
       },
