@@ -354,10 +354,10 @@ document.addEventListener('DOMContentLoaded', () => {
       if (e.key === 'ArrowRight') showReview(currentReview + 1);
     });
 
-    // Fetch approved reviews from GitHub Issues
-    fetch('https://api.github.com/repos/GNU-LuxTech/Personal-Portfolio-Website/issues?labels=approved&state=all')
+    // Fetch approved reviews from GitHub Issues (either labeled 'approved' OR closed as completed)
+    fetch('https://api.github.com/repos/GNU-LuxTech/Personal-Portfolio-Website/issues?state=all&per_page=30')
       .then((res) => {
-        if (!res.ok) throw new Error('Failed to fetch approved reviews');
+        if (!res.ok) throw new Error('Failed to fetch reviews');
         return res.json();
       })
       .then((issues) => {
@@ -365,6 +365,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const liveReviews = [];
 
         issues.forEach((issue) => {
+          // Check if issue is approved: has 'approved' label OR closed as completed
+          const hasApprovedLabel = issue.labels && issue.labels.some((l) => l.name.toLowerCase() === 'approved');
+          const isClosedCompleted = issue.state === 'closed' && (issue.state_reason === 'completed' || !issue.state_reason);
+          const isReview = (issue.title && issue.title.toLowerCase().startsWith('[review]')) || hasApprovedLabel;
+
+          if (!isReview || (!hasApprovedLabel && !isClosedCompleted)) return;
           try {
             // Check if issue body contains JSON block
             const jsonMatch = issue.body && issue.body.match(/```json\s*([\s\S]*?)\s*```/);
